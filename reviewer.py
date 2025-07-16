@@ -23,9 +23,9 @@ EXTENSION_TO_LANGUAGE = {
     '.r': 'R',
     '.m': 'MATLAB',
     '.sql': 'SQL',
-    '.html': 'HTML'
-    '.css': 'CSS'
-    '.js': 'JavaScript'
+    '.html': 'HTML',
+    '.css': 'CSS',
+    '.js': 'JavaScript',
     # Add more as needed
 }
 
