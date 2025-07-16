@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from github_auth import get_installation_token
 from reviewer import review_code_with_ollama
 import requests
+from language_utils import get_language_from_extension, get_review_prompt
 
 load_dotenv()
 
@@ -28,15 +29,16 @@ def webhook():
             if commit["id"] == latest_commit:
                 modified_files.update(commit.get("added", []))
                 modified_files.update(commit.get("modified", []))
-        py_files = [f for f in modified_files if f.endswith(".py")]
-        if not py_files:
+        code_files = [f for f in modified_files if any(f.endswith(ext) for ext in EXTENSION_TO_LANGUAGE.keys())]
+        if not code_files:
             logging.info("No Python files to review.")
             return jsonify({"status": "no .py files"}), 200
 
         token = get_installation_token(installation_id)
         headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github+json"}
 
-        for file_path in py_files:
+        for file_path in code_files:
+            language = get_language_from_extension(file_path)
             # Fetch file content
             url = f"https://api.github.com/repos/{repo}/contents/{file_path}?ref={latest_commit}"
             resp = requests.get(url, headers=headers)
