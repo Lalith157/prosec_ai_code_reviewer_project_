@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from github_auth import get_installation_token
 from reviewer import review_code_with_ollama
 import requests
-from language_utils import get_language_from_extension, get_review_prompt
+from reviewer import get_language_from_extension, get_review_prompt
 
 load_dotenv()
 
